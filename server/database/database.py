@@ -23,6 +23,7 @@ stations:
     name text
     system text
     type text (Starport, Outpost, PlanetaryPort, Settlement, EngineerBase)
+    economy text
 
 megaships: 
     name text pri key

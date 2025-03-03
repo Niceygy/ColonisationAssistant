@@ -51,4 +51,5 @@ def find_systems_within_range(system_name, range_units, session):
     )
 
     results = session.query(StarSystem.system_name).filter(distance_formula <= range_units).all()
+    
     return [row.system_name for row in results]
