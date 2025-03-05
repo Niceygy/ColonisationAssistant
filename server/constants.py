@@ -46,3 +46,25 @@ WHAT_MAKES_THIS = {
     "Water": ["Agri", "Extraction/CraterOutpost"],
     "Water purifiers": ["Industrial"],
 }
+
+SHORTCODE_ASSOCIATIONS = {
+    "Aluminium": 1,
+    "Ceramic Composites": 2,
+    "CMM Composite": 3,
+    "Computer components": 4,
+    "Copper": 5,
+    "Food cartridges": 6,
+    "Fruit and vegetables": 7,
+    "Insulating membrane": 8,
+    "Liquid oxygen": 9,
+    "Medical diagnostic equipment": 10,
+    "Non-lethal weapons": 11,
+    "Polymers": 12,
+    "Power generators": 13,
+    "Semiconductors": 14,
+    "Steel": 15,
+    "Superconductors": 16,
+    "Titanium": 17,
+    "Water": 18,
+    "Water purifiers": 19,
+}

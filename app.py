@@ -91,7 +91,7 @@ def results():
         selected_commodities = session.get("selected_commodities", [])
         selected_system = session.get("selected_system", "")
         stations = find_stations(selected_commodities, selected_system)
-        sharecode = encode_to_share(f"{selected_commodities}@{selected_system}")
+        sharecode = encode_to_share(selected_commodities, selected_system)
         return render_template("results.html", data=stations, system=selected_system, sharecode=sharecode)
     except Exception as e:
         return uhoh(str(e))
