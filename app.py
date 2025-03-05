@@ -11,7 +11,7 @@ from flask import (
     session,
 )
 from contextlib import contextmanager
-
+import base64
 from server.constants import (
     DATABASE_CONNECTION_STRING,
     INITIAL_STATION_TYPES,
@@ -21,6 +21,7 @@ from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
 from server.share import encode_to_share
+
 
 """
 Flask and database
@@ -95,11 +96,21 @@ def results():
         for item in selected_commodities:
             result[item] = stations[i]
             i += 1
-        sharecode = encode_to_share(f"{result}@{selected_system}")
+        sharecode = encode_to_share(f"{selected_commodities}@{selected_system}")
         return render_template("general.html", data=result, system=selected_system, sharecode=sharecode)
     except Exception as e:
         return uhoh(str(e))
 
+@app.route("/import", methods=["GET", "POST"])
+def importdata():
+    b64 = request.args.get("b64")
+    rawdata = base64.b64decode(b64.encode('ascii'))
+    rawdata = str(rawdata).removeprefix("b")
+    commodities = rawdata.split("@")[0]
+    system = rawdata.split("@")[1]
+    session["selected_commodities"] = commodities
+    session["selected_system"] = system
+    return redirect(url_for("results"))
 
 @app.route("/search_systems", methods=["GET"])
 def search_systems():
