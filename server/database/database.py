@@ -54,6 +54,7 @@ class Station(database.Model):
     station_name = Column(String(255))
     star_system = Column(String(255))
     station_type = Column(String(255))
+    economy = Column(String(255))
 
 
 class Megaship(database.Model):

@@ -26,13 +26,13 @@ MATERIAL_LISTS = [
 
 WHAT_MAKES_THIS = {
     "Aluminium": ["Refinery"],
-    "Ceramic Composites": ["Refinery/Surface"],
-    "CMM Composite": ["Refinery/Surface"],
+    "Ceramic Composites": ["Refinery/SurfaceStation"],
+    "CMM Composite": ["Refinery/SurfaceStation"],
     "Computer components": ["Industrial"],
     "Copper": ["Refinery"],
     "Food cartridges": ["Industrial"],
     "Fruit and vegetables": ["Agri"],
-    "Insulating membrane": ["Refinery/Space"],
+    "Insulating membrane": ["Refinery/Starport"],
     "Liquid oxygen": ["Refinery"],
     "Medical diagnostic equipment": ["HighTech"],
     "Non-lethal weapons": ["HighTech", "Military"],
@@ -42,6 +42,6 @@ WHAT_MAKES_THIS = {
     "Steel": ["Refinery"],
     "Superconductors": ["Refinery"],
     "Titanium": ["Refinery"],
-    "Water": ["Agri", "Extraction/Surface"],
+    "Water": ["Agri", "Extraction/SurfaceStation"],
     "Water purifiers": ["Industrial"],
 }
