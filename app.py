@@ -97,7 +97,7 @@ def results():
         result[item] = stations[i]
         i += 1
     print(result)
-    return render_template("general.html", data=result)
+    return render_template("general.html", data=result, system=selected_system)
 
 
 @app.route("/search_systems", methods=["GET"])
