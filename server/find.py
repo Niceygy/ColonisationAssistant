@@ -68,20 +68,12 @@ def distance_to_system(start_system, end_system, database):
 
 def find_stations(commodity_list, user_location):
     # make a list of each type we need
-    station_type_list = []
+    result = {}
     for item in commodity_list:
         station_type = WHAT_MAKES_THIS[item]
-        if station_type not in station_type_list:
-            station_type_list.append(station_type)
-
-    # find 'em!
-
-    stations = []
-    for item in station_type_list:
-        _result = find_nearest_station(item, user_location)
-        stations.append(_result)
-        print(_result)
-    return stations
+        nearest_station = find_nearest_station(station_type, user_location)
+        result[item] = nearest_station
+    return result
 
 
 def find_nearest_station(economy: str, user_location: str):

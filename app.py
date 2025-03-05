@@ -20,7 +20,7 @@ from server.constants import (
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-from server.share import encode_to_share
+from server.share import encode_to_share, decode_and_load
 
 
 """
@@ -63,7 +63,7 @@ def uhoh(error):
     Returns an error page, when somthing goes REALLY WRONGs
     """
     return render_template(
-        "does_not_work.html", ERRORDATA=error, ERRORCODE="IRRECONCILABLE"
+        "error.html", ERRORDATA=error, ERRORCODE="IRRECONCILABLE"
     )
 
 
@@ -91,23 +91,25 @@ def results():
         selected_commodities = session.get("selected_commodities", [])
         selected_system = session.get("selected_system", "")
         stations = find_stations(selected_commodities, selected_system)
-        result = {}
-        i = 0
-        for item in selected_commodities:
-            result[item] = stations[i]
-            i += 1
         sharecode = encode_to_share(f"{selected_commodities}@{selected_system}")
-        return render_template("general.html", data=result, system=selected_system, sharecode=sharecode)
+        return render_template("results.html", data=stations, system=selected_system, sharecode=sharecode)
     except Exception as e:
         return uhoh(str(e))
 
 @app.route("/import", methods=["GET", "POST"])
 def importdata():
-    b64 = request.args.get("b64")
-    rawdata = base64.b64decode(b64.encode('ascii'))
-    rawdata = str(rawdata).removeprefix("b")
-    commodities = rawdata.split("@")[0]
+    b64 = None
+    if request.method == "GET":
+        b64 = request.args.get("b64")
+    else:
+        b64 = request.form.get("b64")
+    rawdata = decode_and_load(b64.strip())
+    _rawdata = str(rawdata)
+    commodities = _rawdata.split("@")[0].removeprefix('[').replace("'", '').removesuffix(']').split(",")
+    for i in range(len(commodities)):
+        commodities[i] = commodities[i].replace(" ", "").strip()
     system = rawdata.split("@")[1]
+    print(f"commodities {list(commodities)} / system {system}")
     session["selected_commodities"] = commodities
     session["selected_system"] = system
     return redirect(url_for("results"))

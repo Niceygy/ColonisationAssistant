@@ -1,8 +1,9 @@
 import base64
 
 def encode_to_share(data):
-    return base64.b64encode(data.encode('ascii')).decode('ascii')
+    return data.encode("utf-8").hex()
+    
 
 def decode_and_load(data):
-    decoded = base64.b64decode(data)
-    print(decoded)
+    print(bytearray.fromhex(f"{data}").decode())
+    return bytearray.fromhex(f"{data}").decode()

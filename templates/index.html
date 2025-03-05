@@ -57,6 +57,12 @@
         
         <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
     </form>
+    <form action="/import" method="post">
+        <h2>Import</h2>
+        <input name="b64" ></input>
+        <br>
+        <button type="submit" onclick="toggleLoadingBtn()">Import!</button>
+    </form>
     <div class="loadingIcon" style="float: right;">
         <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
     </div>
