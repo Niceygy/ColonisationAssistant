@@ -5,4 +5,4 @@
 -- FROM star_systems
 -- WHERE system_name NOT IN (SELECT DISTINCT star_system FROM stations);
 
-SELECT * FROM stations WHERE station_type LIKE "SurfaceStation";
+SELECT * FROM stations WHERE station_type = "CraterOutpost" and economy = "Refinery";

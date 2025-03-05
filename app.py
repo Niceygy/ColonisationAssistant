@@ -12,7 +12,11 @@ from flask import (
 )
 from contextlib import contextmanager
 
-from server.constants import DATABASE_CONNECTION_STRING, INITIAL_STATION_TYPES, MATERIAL_LISTS
+from server.constants import (
+    DATABASE_CONNECTION_STRING,
+    INITIAL_STATION_TYPES,
+    MATERIAL_LISTS,
+)
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
@@ -30,8 +34,9 @@ app.config["SQLALCHEMY_POOL_SIZE"] = 10
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 30
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 app.config["SQLALCHEMY_MAX_OVERFLOW"] = 20
-app.secret_key = 'supersecretkey'
+app.secret_key = "supersecretkey"
 database.init_app(app)
+
 
 @contextmanager
 def session_scope():
@@ -45,6 +50,7 @@ def session_scope():
     finally:
         print(" * Closing session")
         session.close()
+
 
 """
 Error Handler
@@ -69,27 +75,20 @@ Route Handlers
 def index():
     try:
         if request.method == "GET":
-            return render_template(
-                "index.html",
-                commodities=MATERIAL_LISTS
-            )
-        elif request.method == 'POST':
-                selected_commodities = request.form.getlist('commodities')
-                selected_system = request.form.get("system")
-                session['selected_commodities'] = selected_commodities
-                session['selected_system'] = selected_system
-                return redirect(
-                    url_for("results")
-                )
-
+            return render_template("index.html", commodities=MATERIAL_LISTS)
+        elif request.method == "POST":
+            session["selected_commodities"] = request.form.getlist("commodities")
+            session["selected_system"] = request.form.get("system")
+            return redirect(url_for("results"))
     except Exception as e:
         return uhoh(str(e))
-    
+
+
 @app.route("/results", methods=["GET"])
 def results():
     try:
-        selected_commodities = session.get('selected_commodities', [])
-        selected_system = session.get('selected_system', "")
+        selected_commodities = session.get("selected_commodities", [])
+        selected_system = session.get("selected_system", "")
         stations = find_stations(selected_commodities, selected_system)
         result = {}
         i = 0
@@ -101,8 +100,8 @@ def results():
     except Exception as e:
         return uhoh(str(e))
 
+
 @app.route("/search_systems", methods=["GET"])
-#@cache.cached(timeout=60, query_string=True)
 def search_systems():
     query = request.args.get("query")
     results = query_star_systems(query)

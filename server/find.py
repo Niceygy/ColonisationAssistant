@@ -97,6 +97,8 @@ def find_nearest_station(economy: str, user_location: str):
     user_coords = system_coordinates(user_location, database)
     if len(economy) > 1:
         economy = economy[1]
+    else:
+        economy = economy[0]
 
     if None in user_coords:
         return
@@ -109,8 +111,7 @@ def find_nearest_station(economy: str, user_location: str):
     )
 
     nearest_station = None
-
-    if "/" in economy:
+    if '/' in economy:
         location = economy.split("/")[1]
         economy = economy.split("/")[0]
         nearest_station = (
@@ -137,8 +138,6 @@ def find_nearest_station(economy: str, user_location: str):
             .first()
         )
 
-    if not nearest_station:
-        print(f"none for economy {economy} / user location {user_location}")
     return (
         (nearest_station.station_name, nearest_station.star_system)
         if nearest_station
