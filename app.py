@@ -16,6 +16,7 @@ from contextlib import contextmanager
 from server.constants import DATABASE_CONNECTION_STRING, INITIAL_STATION_TYPES, MATERIAL_LISTS
 from server.database.database import database
 from server.database.search import query_star_systems
+from server.find import find_stations
 
 
 """
@@ -89,7 +90,14 @@ def index():
 def results():
     selected_commodities = session.get('selected_commodities', [])
     selected_system = session.get('selected_system', "")
-    return render_template("general.html", commodities=selected_commodities, system=selected_system)
+    stations = find_stations(selected_commodities, selected_system)
+    result = {}
+    i = 0
+    for item in selected_commodities:
+        result[item] = stations[i]
+        i += 1
+    print(result)
+    return render_template("general.html", data=result)
 
 
 @app.route("/search_systems", methods=["GET"])

@@ -16,8 +16,8 @@
 
     <h1>Commodities:</h1>
     <ul>
-    {% for material in commodities %}
-      <li>{{ material }}</li>
+    {% for key, item in data.items() %}
+      <li>{{ item[0] }} has {{ key }} (In {{ item[1] }})</li>
     {% endfor %}
 
     <br />

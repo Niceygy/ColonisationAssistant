@@ -76,11 +76,15 @@ def find_stations(commodity_list, user_location):
     stations = []
     for item in station_type_list:
         _result = find_nearest_station(item, user_location)
+        stations.append(_result)
+        print(_result)
+    return stations
         
 
 
 def find_nearest_station(economy: str, user_location: str):
     user_coords = system_coordinates(user_location, database)
+    economy = economy[1]
 
     if None in user_coords:
         return
