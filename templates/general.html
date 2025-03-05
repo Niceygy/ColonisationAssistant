@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>PowerPlay Assistant - Results</title>
+    <title>Colonisation Helper - Results</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='main.css') }}"
@@ -13,21 +13,13 @@
   <body>
     <h1>Selected Options</h1>
     <p><strong>System:</strong> {{ system }}</p>
-    <p><strong>Station Type:</strong> {{ power }}</p>
 
-    <h1>About Claim:</h1>
-    <p><strong>Nearest Inhabited system: </strong> {{ nearestInhabited }}</p>
-    <p><strong>Materials Requires : </strong> {{ matsNeeded }}</p>
-    <p><strong>Expanding Faction: </strong> {{ nearestFaction }}</p>
-    <!-- <p><strong>Notes: </strong> {{ systemNotes }} </p> -->
+    <h1>Commodities:</h1>
+    <ul>
+    {% for material in commodities %}
+      <li>{{ material }}</li>
+    {% endfor %}
 
-    <h1>Selected Task:</h1>
-    <p><strong>Task: </strong> {{ taskName }}</p>
-    <p><strong>Task Type: </strong> {{ taskType }}</p>
-    <p class="task-description"><strong>Task Description: </strong> {{ taskDescription }}</p>
-    <p><strong>This {{ isIllegal }} Illegal </strong></p>
-    <p><strong>This {{ isOpposingWeakness }} the opposing power's weakness</strong></p>
-    <p><strong>This {{ isOwnStrength }} your power's strength</strong></p>
     <br />
 
 

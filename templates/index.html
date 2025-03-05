@@ -40,22 +40,24 @@
 <body>
     <h1>colonisation helper</h1>
     <div class="specifyTask">
-    <h2>Claim new system</h2>
+    <h2>Create Supply Route:</h2>
     <form action="/" method="post">
-        <label for="system">system:</label>
+        <label for="system">Near System:</label>
         <input list="system-results" id="system" name="system" oninput="searchSystems()" autocomplete="off">
         <datalist id="system-results"></datalist><br><br>
+        
+        <br>
+        <label for="commodities">With Commodities:</label><br>
+        {% for commodity in commodities %}
+            <input type="checkbox" id="{{ commodity }}" name="commodities" value="{{ commodity }}">
+            <label for="{{ commodity }}">{{ commodity }}</label><br>
+        {% endfor %}
 
-        <label for="type">Station Type:</label>
-        <select id="type" name="type">
-            {% for type in types %}
-                <option value="{{ type }}" {% if selected_power == type %}selected{% endif %}>{{ type }}</option>
-            {% endfor %}
-        </select><br><br>
-
+        <br>
+        
         <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
     </form>
-    <div class="loadingIcon"    >
+    <div class="loadingIcon" style="float: right;">
         <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
     </div>
     </div>
@@ -66,6 +68,5 @@
     <a href="https://niceygy.net">Niceygy.Net</a>
     <a href="https://go.niceygy.net/support_me">Support Me</a>
     <br>
-    <div class="glowing-emoji">{{ status_emoji }} {{ status_text }}</div>
 </div>
 </html>

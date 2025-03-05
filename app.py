@@ -3,14 +3,17 @@ print("Loading...")
 from flask import (
     Flask,
     jsonify,
+    redirect,
     render_template,
     request,
     send_from_directory,
+    url_for,
+    session,
 )
 from contextlib import contextmanager
 # from flask_sqlalchemy import SQLAlchemy
 
-from server.constants import DATABASE_CONNECTION_STRING, INITIAL_STATION_TYPES
+from server.constants import DATABASE_CONNECTION_STRING, INITIAL_STATION_TYPES, MATERIAL_LISTS
 from server.database.database import database
 from server.database.search import query_star_systems
 
@@ -27,6 +30,7 @@ app.config["SQLALCHEMY_POOL_SIZE"] = 10
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 30
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 app.config["SQLALCHEMY_MAX_OVERFLOW"] = 20
+app.secret_key = 'supersecretkey'
 database.init_app(app)
 
 @contextmanager
@@ -67,15 +71,25 @@ def index():
         if request.method == "GET":
             return render_template(
                 "index.html",
-                types=INITIAL_STATION_TYPES
+                commodities=MATERIAL_LISTS
             )
-        else:
-            system_name = request.form.get("system")
-            station_type = request.form.get("type")
-            return f"{system_name},{station_type}"
+        elif request.method == 'POST':
+                selected_commodities = request.form.getlist('commodities')
+                selected_system = request.form.get("system")
+                session['selected_commodities'] = selected_commodities
+                session['selected_system'] = selected_system
+                return redirect(
+                    url_for("results")
+                )
+
     except Exception as e:
         return uhoh(str(e))
     
+@app.route("/results", methods=["GET"])
+def results():
+    selected_commodities = session.get('selected_commodities', [])
+    selected_system = session.get('selected_system', "")
+    return render_template("general.html", commodities=selected_commodities, system=selected_system)
 
 
 @app.route("/search_systems", methods=["GET"])
