@@ -20,7 +20,7 @@ from server.constants import (
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-
+from server.share import encode_to_share
 
 """
 Flask and database
@@ -95,8 +95,8 @@ def results():
         for item in selected_commodities:
             result[item] = stations[i]
             i += 1
-        print(result)
-        return render_template("general.html", data=result, system=selected_system)
+        sharecode = encode_to_share(f"{result}@{selected_system}")
+        return render_template("general.html", data=result, system=selected_system, sharecode=sharecode)
     except Exception as e:
         return uhoh(str(e))
 
