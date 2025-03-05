@@ -24,10 +24,11 @@ MATERIAL_LISTS = [
     "Water purifiers",
 ]
 
+#SurfaceStation
 WHAT_MAKES_THIS = {
     "Aluminium": ["Refinery"],
-    "Ceramic Composites": ["Refinery/SurfaceStation"],
-    "CMM Composite": ["Refinery/SurfaceStation"],
+    "Ceramic Composites": ["Refinery/CraterOutpost"],
+    "CMM Composite": ["Refinery/CraterOutpost"],
     "Computer components": ["Industrial"],
     "Copper": ["Refinery"],
     "Food cartridges": ["Industrial"],
@@ -42,6 +43,6 @@ WHAT_MAKES_THIS = {
     "Steel": ["Refinery"],
     "Superconductors": ["Refinery"],
     "Titanium": ["Refinery"],
-    "Water": ["Agri", "Extraction/SurfaceStation"],
+    "Water": ["Agri", "Extraction/CraterOutpost"],
     "Water purifiers": ["Industrial"],
 }

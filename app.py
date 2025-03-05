@@ -11,7 +11,6 @@ from flask import (
     session,
 )
 from contextlib import contextmanager
-# from flask_sqlalchemy import SQLAlchemy
 
 from server.constants import DATABASE_CONNECTION_STRING, INITIAL_STATION_TYPES, MATERIAL_LISTS
 from server.database.database import database
@@ -88,17 +87,19 @@ def index():
     
 @app.route("/results", methods=["GET"])
 def results():
-    selected_commodities = session.get('selected_commodities', [])
-    selected_system = session.get('selected_system', "")
-    stations = find_stations(selected_commodities, selected_system)
-    result = {}
-    i = 0
-    for item in selected_commodities:
-        result[item] = stations[i]
-        i += 1
-    print(result)
-    return render_template("general.html", data=result, system=selected_system)
-
+    try:
+        selected_commodities = session.get('selected_commodities', [])
+        selected_system = session.get('selected_system', "")
+        stations = find_stations(selected_commodities, selected_system)
+        result = {}
+        i = 0
+        for item in selected_commodities:
+            result[item] = stations[i]
+            i += 1
+        print(result)
+        return render_template("general.html", data=result, system=selected_system)
+    except Exception as e:
+        return uhoh(str(e))
 
 @app.route("/search_systems", methods=["GET"])
 #@cache.cached(timeout=60, query_string=True)
@@ -109,19 +110,16 @@ def search_systems():
 
 
 @app.route("/favicon.ico")
-#@cache.cached(timeout=60)
 def favicon():
     return send_from_directory(app.static_folder, "favicon.ico")
 
 
 @app.route("/copy_icon.svg")
-#@cache.cached(timeout=60)
 def copy_icon():
     return send_from_directory(app.static_folder, "copy_solid_icon.svg")
 
 
 @app.route("/changelog", methods=["GET"])
-#@cache.cached(timeout=60)
 def changelog():
     return render_template("changelog.html")
 

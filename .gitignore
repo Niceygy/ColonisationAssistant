@@ -1,2 +1,6 @@
 .vscode/
 .pyc
+.venv
+*.pyc
+*/__pycache__/*
+server/__pycache__/constants.cpython-310.pyc
