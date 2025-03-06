@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, func
+from sqlalchemy import Column, Integer, String, Float, Boolean, JSON
 from flask_sqlalchemy import SQLAlchemy
 import math
 
@@ -73,6 +73,12 @@ class RareGoods(database.Model):
     good_name = Column(String(255), primary_key=True)
     system_name = Column(String(255))
     station_name = Column(String(255))
+    
+class UserData(database.Model):
+    __tablename__ = "userdata"
+    ID = Column(Integer, primary_key=True, autoincrement=True)
+    system_name = Column(String(255))
+    jsondata = Column(JSON)
 
 
 def system_coordinates(system_name, database):

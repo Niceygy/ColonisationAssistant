@@ -1,8 +1,5 @@
--- SELECT COUNT(DISTINCT star_system) AS withs
--- FROM stations;
-
--- SELECT COUNT(*) AS without
--- FROM star_systems
--- WHERE system_name NOT IN (SELECT DISTINCT star_system FROM stations);
-
-SELECT * FROM stations WHERE station_type = "CraterOutpost" and economy = "Refinery";
+CREATE TABLE IF NOT EXISTS userdata (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    system_name varchar(255),
+    jsondata JSON
+)
