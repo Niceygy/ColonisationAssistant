@@ -68,3 +68,4 @@ SHORTCODE_ASSOCIATIONS = {
     "Water": 18,
     "Water purifiers": 19,
 }
+
