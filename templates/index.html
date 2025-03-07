@@ -40,29 +40,29 @@
 <body>
     <h1>colonisation helper</h1>
     <div class="specifyTask">
-    <h2>Create Supply Route:</h2>
+    <h2>Specify station:</h2>
     <form action="/" method="post">
         <label for="system">Near System:</label>
         <input list="system-results" id="system" name="system" oninput="searchSystems()" autocomplete="off">
         <datalist id="system-results"></datalist><br><br>
         
-        <br>
-        <label for="commodities">With Commodities:</label><br>
-        {% for commodity in commodities %}
-            <input type="checkbox" id="{{ commodity }}" name="commodities" value="{{ commodity }}">
-            <label for="{{ commodity }}">{{ commodity }}</label><br>
-        {% endfor %}
-
-        <br>
+        <!-- <br> -->
+        <label for="station_types">Type:</label><br>
+        <select id="station_types" name="station_types">
+            {% for type in station_types %}
+                <option value="{{ type }}" {% if selected_type == type %}selected{% endif %}>{{ type }}</option>
+            {% endfor %}
+        </select>
+        <br />
         
         <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
     </form>
-    <form action="/import" method="post">
+    <!-- <form action="/import" method="post">
         <h2>Import</h2>
         <input name="b64" ></input>
         <br>
         <button type="submit" onclick="toggleLoadingBtn()">Import!</button>
-    </form>
+    </form> -->
     <div class="loadingIcon" style="float: right;">
         <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
     </div>

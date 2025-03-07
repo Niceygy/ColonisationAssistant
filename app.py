@@ -14,13 +14,14 @@ from contextlib import contextmanager
 import base64
 from server.constants import (
     DATABASE_CONNECTION_STRING,
-    INITIAL_STATION_TYPES,
+    STATION_TYPES,
     MATERIAL_LISTS,
 )
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
 from server.database.share import save_to_share, load
+from server.commodities import get_required_items
 
 
 """
@@ -76,9 +77,9 @@ Route Handlers
 def index():
     try:
         if request.method == "GET":
-            return render_template("index.html", commodities=MATERIAL_LISTS)
+            return render_template("index.html", station_types=STATION_TYPES)
         elif request.method == "POST":
-            session["selected_commodities"] = request.form.getlist("commodities")
+            session["selected_type"] = request.form.get("station_types")
             session["selected_system"] = request.form.get("system")
             return redirect(url_for("results"))
     except Exception as e:
@@ -88,9 +89,11 @@ def index():
 @app.route("/results", methods=["GET"])
 def results():
     try:
-        selected_commodities = session.get("selected_commodities", [])
+        selected_station_type = session.get("selected_type", [])
         selected_system = session.get("selected_system", "")
-        stations = find_stations(selected_commodities, selected_system)
+        commodities = get_required_items(selected_station_type)
+        stations = find_stations(commodities, selected_system)
+        print(stations)
         return render_template("results.html", data=stations, system=selected_system)
     except Exception as e:
         return uhoh(str(e))

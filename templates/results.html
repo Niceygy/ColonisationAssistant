@@ -47,6 +47,7 @@
     <h1>Commodities:</h1>
     <ul>
     {% for key, item in data.items() %}
+    <!-- Item = [Station, required_count] -->
       <li onclick="copyText('{{ item[1] }}')">{{ item[0] }} has {{ key }} (In {{ item[1] }}) <input type="checkbox"></input></li>
     {% endfor %}
 

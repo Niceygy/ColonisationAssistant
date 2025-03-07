@@ -69,10 +69,11 @@ def distance_to_system(start_system, end_system, database):
 def find_stations(commodity_list, user_location):
     # make a list of each type we need
     result = {}
-    for item in commodity_list:
-        station_type = WHAT_MAKES_THIS[item]
+    for key, value in commodity_list:
+        station_type = WHAT_MAKES_THIS[key]
         nearest_station = find_nearest_station(station_type, user_location)
-        result[item] = nearest_station
+        result[key] = [nearest_station, value]
+        #copper = [Dadeleus, 400]
     return result
 
 

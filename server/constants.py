@@ -1,6 +1,51 @@
 DATABASE_CONNECTION_STRING = "mysql+pymysql://assistant:6548@10.0.0.52/elite"
 
-INITIAL_STATION_TYPES = ["Outpost", "Starport"]
+STATION_TYPES = [
+    "Coriolis",
+    "Asteroid Base",
+    "Ocellus",
+    "Orbis",
+    "Commercial Outpost",
+    "Industrial Outpost",
+    "Criminal Outpost",
+    "Civilian Outpost",
+    "Scientific Outpost",
+    "Military Outpost",
+    "Satellite",
+    "Communication Station",
+    "Space Farm",
+    "Pirate Base",
+    "Mining Outpost",
+    "Relay Station",
+    "Military",
+    "Security Station",
+    "Government",
+    "Medical",
+    "Research Station",
+    "Tourist",
+    "Bar",
+    "Outpost",
+    "Port",
+    "Agriculture Tier 1",
+    "Agriculture Tier 2",
+    "Extraction Tier 1",
+    "Extraction Tier 2",
+    "Industrial Tier 1",
+    "Industrial Tier 2",
+    "Military Tier 1",
+    "Military Tier 2",
+    "Research Bio Tier 1",
+    "Research Bio Tier 2",
+    "Tourism Tier 1",
+    "Tourism Tier 2",
+    "Extraction",
+    "Civilian",
+    "Exploration",
+    "Scientific",
+    "Refinery",
+    "High Tech",
+    "Industrial",
+]
 
 MATERIAL_LISTS = [
     "Aluminium",
@@ -24,7 +69,7 @@ MATERIAL_LISTS = [
     "Water purifiers",
 ]
 
-#SurfaceStation
+# SurfaceStation
 WHAT_MAKES_THIS = {
     "Aluminium": ["Refinery"],
     "Ceramic Composites": ["Refinery/CraterOutpost"],
@@ -46,26 +91,3 @@ WHAT_MAKES_THIS = {
     "Water": ["Agri", "Extraction/CraterOutpost"],
     "Water purifiers": ["Industrial"],
 }
-
-SHORTCODE_ASSOCIATIONS = {
-    "Aluminium": 1,
-    "Ceramic Composites": 2,
-    "CMM Composite": 3,
-    "Computer components": 4,
-    "Copper": 5,
-    "Food cartridges": 6,
-    "Fruit and vegetables": 7,
-    "Insulating membrane": 8,
-    "Liquid oxygen": 9,
-    "Medical diagnostic equipment": 10,
-    "Non-lethal weapons": 11,
-    "Polymers": 12,
-    "Power generators": 13,
-    "Semiconductors": 14,
-    "Steel": 15,
-    "Superconductors": 16,
-    "Titanium": 17,
-    "Water": 18,
-    "Water purifiers": 19,
-}
-
