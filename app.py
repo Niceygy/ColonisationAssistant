@@ -20,7 +20,7 @@ from server.constants import (
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-from server.share import encode_to_share, decode_and_load
+from server.database.share import save_to_share, load
 
 
 """
@@ -91,28 +91,40 @@ def results():
         selected_commodities = session.get("selected_commodities", [])
         selected_system = session.get("selected_system", "")
         stations = find_stations(selected_commodities, selected_system)
-        sharecode = encode_to_share(selected_commodities, selected_system)
-        return render_template("results.html", data=stations, system=selected_system, sharecode=sharecode)
+        return render_template("results.html", data=stations, system=selected_system)
     except Exception as e:
         return uhoh(str(e))
 
 @app.route("/import", methods=["GET", "POST"])
 def importdata():
-    b64 = None
+    id = None
     if request.method == "GET":
-        b64 = request.args.get("b64")
+        id = request.args.get("b64")
     else:
-        b64 = request.form.get("b64")
-    rawdata = decode_and_load(b64.strip())
-    _rawdata = str(rawdata)
-    commodities = _rawdata.split("@")[0].removeprefix('[').replace("'", '').removesuffix(']').split(",")
-    for i in range(len(commodities)):
-        commodities[i] = commodities[i].replace(" ", "").strip()
-    system = rawdata.split("@")[1]
+        id = request.form.get("b64")
+    commodities, system = load(id)
     print(f"commodities {list(commodities)} / system {system}")
     session["selected_commodities"] = commodities
     session["selected_system"] = system
+    session["loaded_from_db"] = True
+    session["sharecode"] = id
     return redirect(url_for("results"))
+
+@app.route("/sharecode", methods=["GET", "POST"])
+def generate_sharecode():
+        selected_commodities = session.get("selected_commodities", [])
+        selected_system = session.get("selected_system", "")
+        sharecode = None
+        if session.get("loaded_from_db"):
+            sharecode = session.get("sharecode")
+        else:
+            sharecode = save_to_share(selected_commodities, selected_system)
+        return sharecode
+    
+@app.route("/update_shared", methods=["GET", "POST"])
+def update_shared():
+    id = session.get("shortcode")
+    
 
 @app.route("/search_systems", methods=["GET"])
 def search_systems():
@@ -124,11 +136,6 @@ def search_systems():
 @app.route("/favicon.ico")
 def favicon():
     return send_from_directory(app.static_folder, "favicon.ico")
-
-
-@app.route("/copy_icon.svg")
-def copy_icon():
-    return send_from_directory(app.static_folder, "copy_solid_icon.svg")
 
 
 @app.route("/changelog", methods=["GET"])
