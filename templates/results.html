@@ -48,7 +48,7 @@
     <ul>
     {% for key, item in data.items() %}
     <!-- Item = [Station, required_count] -->
-      <li onclick="copyText('{{ item[1] }}')">{{ item[0] }} has {{ key }} (In {{ item[1] }}) <input type="checkbox"></input></li>
+    <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) <input type="text" value="0 / {{ item[1] }}"></li>
     {% endfor %}
 
     <br />

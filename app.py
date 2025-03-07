@@ -79,6 +79,7 @@ def index():
         if request.method == "GET":
             return render_template("index.html", station_types=STATION_TYPES)
         elif request.method == "POST":
+            print(request.form)  # Debugging statement
             session["selected_type"] = request.form.get("station_types")
             session["selected_system"] = request.form.get("system")
             return redirect(url_for("results"))
@@ -90,8 +91,10 @@ def index():
 def results():
     try:
         selected_station_type = session.get("selected_type", [])
+        print(selected_station_type)
         selected_system = session.get("selected_system", "")
         commodities = get_required_items(selected_station_type)
+        print(commodities)
         stations = find_stations(commodities, selected_system)
         print(stations)
         return render_template("results.html", data=stations, system=selected_system)
