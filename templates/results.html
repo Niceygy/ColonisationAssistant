@@ -43,17 +43,18 @@
   <body>
     <h1>Selected Options</h1>
     <p><strong>System:</strong> {{ system }}</p>
+    <p><strong>Station Type: </strong> {{ stype }}</p>
 
     <h1>Commodities:</h1>
     <ul>
     {% for key, item in data.items() %}
     <!-- Item = [Station, required_count] -->
-    <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) <input type="text" value="0 / {{ item[1] }}"></li>
+    <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) <input type="text" value="0 / {{ item[1] }}" onclick="event.stopPropagation();"></li>
     {% endfor %}
 
     <br />
-    <button onclick="get_sharecode()">Get Sharecode</button>
-    <br />
+    <!-- <button onclick="get_sharecode()">Get Sharecode</button>
+    <br /> -->
 
 
     <a href="{{ url_for('index') }}">Back to Home</a>

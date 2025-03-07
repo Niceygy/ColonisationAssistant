@@ -63,9 +63,7 @@ def uhoh(error):
     """
     Returns an error page, when somthing goes REALLY WRONGs
     """
-    return render_template(
-        "error.html", ERRORDATA=error, ERRORCODE="IRRECONCILABLE"
-    )
+    return render_template("error.html", ERRORDATA=error, ERRORCODE="IRRECONCILABLE")
 
 
 """
@@ -97,9 +95,10 @@ def results():
         print(commodities)
         stations = find_stations(commodities, selected_system)
         print(stations)
-        return render_template("results.html", data=stations, system=selected_system)
+        return render_template("results.html", data=stations, system=selected_system, stype=selected_station_type)
     except Exception as e:
         return uhoh(str(e))
+
 
 @app.route("/import", methods=["GET", "POST"])
 def importdata():
@@ -116,21 +115,23 @@ def importdata():
     session["sharecode"] = id
     return redirect(url_for("results"))
 
+
 @app.route("/sharecode", methods=["GET", "POST"])
 def generate_sharecode():
-        selected_commodities = session.get("selected_commodities", [])
-        selected_system = session.get("selected_system", "")
-        sharecode = None
-        if session.get("loaded_from_db"):
-            sharecode = session.get("sharecode")
-        else:
-            sharecode = save_to_share(selected_commodities, selected_system)
-        return sharecode
-    
+    selected_commodities = session.get("selected_commodities", [])
+    selected_system = session.get("selected_system", "")
+    sharecode = None
+    if session.get("loaded_from_db"):
+        sharecode = session.get("sharecode")
+    else:
+        sharecode = save_to_share(selected_commodities, selected_system)
+    return sharecode
+
+
 @app.route("/update_shared", methods=["GET", "POST"])
 def update_shared():
     id = session.get("shortcode")
-    
+
 
 @app.route("/search_systems", methods=["GET"])
 def search_systems():
