@@ -1,7 +1,8 @@
 .vscode/
 .venv/
 # Byte-compiled / optimized / DLL files
-__pycache__/
+*/__pycache__/*
+*cpython*
 *.py[cod]
 *$py.class
 

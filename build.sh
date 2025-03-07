@@ -1,0 +1,22 @@
+#!/bin/bash
+
+clear
+
+# Build the Docker image
+docker build -t niceygy/colonyassistant .
+
+# Tag the Docker image (optional)
+docker tag niceygy/colonyassistant ghcr.io/niceygy/colonisationassistant:latest
+
+# Push the Docker image to GH registry
+docker push ghcr.io/niceygy/colonisationassistant:latest
+
+#Update local container
+
+# cd /opt/stacks/powerplay_assistant
+
+# docker compose pull
+
+# docker compose down
+
+# docker compose up -d

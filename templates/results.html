@@ -9,36 +9,7 @@
     />
     <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" type="image/x-icon">
     <script defer src="https://data.niceygy.net/script.js" data-website-id="cf44cb82-ef40-43b4-a9ea-5e0c4e27e90a"></script>
-    <script>
-      function copyText(text) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function() {
-            alert("Copied " + text);
-          }).catch(function(err) {
-            console.error('Could not copy text: ', err);
-          });
-        } else {
-          // Fallback method
-          let textarea = document.createElement("textarea");
-          textarea.value = text;
-          document.body.appendChild(textarea);
-          textarea.select();
-          try {
-            document.execCommand("copy");
-            alert("Copied " + text);
-          } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-          }
-          document.body.removeChild(textarea);
-        }
-      }
-
-      function get_sharecode() {
-        fetch("{{ url_for('generate_sharecode') }}")
-    .then(response => response.text())
-  .then(text => copyText(text));
-      }
-    </script>
+    <script src="js/util.js"></script>
   </head>
   <body>
     <h1>Selected Options</h1>

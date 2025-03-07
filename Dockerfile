@@ -13,7 +13,7 @@ WORKDIR /home
 RUN pip install -r requirements.txt
 
 # Expose ports
-EXPOSE 80
+EXPOSE 5005
 
 # Label
 
