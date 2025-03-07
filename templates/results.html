@@ -16,7 +16,7 @@
           document.querySelectorAll('input[type="text"]').forEach(input => {
             values.push(input.value);
           });
-        console.log(values); 
+          return values;
         }
 
         function setTextBoxValues(values) {
@@ -27,12 +27,14 @@
         }
 
         function restore() {
-          values = document.cookie
+          values = document.cookie.toString().split(",")
+          console.log("values " + values)
           setTextBoxValues(values)
         }
 
         function save() {
-          document.cookie = "an_comlist=" + getTextBoxValues() + ";"
+          document.cookie = ""
+          document.cookie = getTextBoxValues()
         }
     </script>
   </head>
@@ -52,7 +54,7 @@
     {% endfor %}
 
     <br />
-    <button onclick="getTextBoxValues()">Save Locally</button>
+    <button onclick="save()">Save Locally</button>
     <br />
 
 
