@@ -11,11 +11,9 @@ from flask import (
     session,
 )
 from contextlib import contextmanager
-import base64
 from server.constants import (
     DATABASE_CONNECTION_STRING,
     STATION_TYPES,
-    MATERIAL_LISTS,
 )
 from server.database.database import database
 from server.database.search import query_star_systems

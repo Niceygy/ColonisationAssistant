@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colonisation Helper</title>
+    <title>Architect's Notepad</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <script defer src="https://data.niceygy.net/script.js" data-website-id="cf44cb82-ef40-43b4-a9ea-5e0c4e27e90a"></script>
     <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" type="image/x-icon">
-    <!-- <meta name='description' content='PowerPlay Assistant is a compainon website for Elite: Dangerous, to help commanders with their powerplay 2.0 tasks.'> -->
+    <meta name='description' content='Architects Notepad is a compainon website for Elite: Dangerous, to help commanders with colonising new star systems.'>
     <script defer>
         async function searchSystems(isTwo=false) {
             let elementID = "system";
@@ -38,7 +38,7 @@
         }
     </script>
 <body>
-    <h1>colonisation helper</h1>
+    <h1>Architect's Notepad</h1>
     <div class="specifyTask">
     <h2>Specify station:</h2>
     <form action="/" method="post">
@@ -58,6 +58,7 @@
         
         <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
     </form>
+    <p>Please be aware that this site is under development!</p>
     <!-- <form action="/import" method="post">
         <h2>Import</h2>
         <input name="b64" ></input>
@@ -74,6 +75,7 @@
     <a href="{{ url_for('changelog') }}">Changelog</a>
     <a href="https://niceygy.net">Niceygy.Net</a>
     <a href="https://go.niceygy.net/support_me">Support Me</a>
+    <a href="https://go.niceygy.net/architectnotepad_thread">Forum Thread</a>
     <br>
 </div>
 </html>

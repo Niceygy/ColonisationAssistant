@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Colonisation Helper - Results</title>
+    <title>Architect's Notepad - Results</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='main.css') }}"
@@ -10,6 +10,31 @@
     <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" type="image/x-icon">
     <script defer src="https://data.niceygy.net/script.js" data-website-id="cf44cb82-ef40-43b4-a9ea-5e0c4e27e90a"></script>
     <script src="js/util.js"></script>
+    <script>
+        function getTextBoxValues() {
+          const values = [];
+          document.querySelectorAll('input[type="text"]').forEach(input => {
+            values.push(input.value);
+          });
+        console.log(values); 
+        }
+
+        function setTextBoxValues(values) {
+          const inputs = document.querySelectorAll('input[type="text"]');
+          inputs.forEach((input, index) => {
+            input.value = values[index] || '';
+          });
+        }
+
+        function restore() {
+          values = document.cookie
+          setTextBoxValues(values)
+        }
+
+        function save() {
+          document.cookie = "an_comlist=" + getTextBoxValues() + ";"
+        }
+    </script>
   </head>
   <body>
     <h1>Selected Options</h1>
@@ -20,12 +45,15 @@
     <ul>
     {% for key, item in data.items() %}
     <!-- Item = [Station, required_count] -->
-    <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) <input type="text" value="0 / {{ item[1] }}" onclick="event.stopPropagation();"></li>
+    <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) 
+      <input type="text" value="0" onclick="event.stopPropagation();"> 
+      <p style="display:inline;">/ {{ item[1] }}</p>
+    </li>
     {% endfor %}
 
     <br />
-    <!-- <button onclick="get_sharecode()">Get Sharecode</button>
-    <br /> -->
+    <button onclick="getTextBoxValues()">Save Locally</button>
+    <br />
 
 
     <a href="{{ url_for('index') }}">Back to Home</a>
