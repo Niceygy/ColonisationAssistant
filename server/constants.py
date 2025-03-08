@@ -69,25 +69,60 @@ MATERIAL_LISTS = [
     "Water purifiers",
 ]
 
+
+"""
+
+
+
+"""
+
 # SurfaceStation
 WHAT_MAKES_THIS = {
     "Aluminium": ["Refinery"],
+    "Biowaste": ["!Agri"],
+    "Building Fabricators": ["Industrial"],
     "Ceramic Composites": ["Refinery/CraterOutpost"],
     "CMM Composite": ["Refinery/CraterOutpost"],
     "Computer Components": ["Industrial"],
     "Copper": ["Refinery"],
+    "Crop Harvesters": ["Industrial"],
+    "Evacuation Shelter": ["HighTech"],
+    "Emergency Power Cells": ["Constant", "High Tech", "Refinery"],
     "Food Cartridges": ["Industrial"],
     "Fruit and Vegetables": ["Agri"],
+    "Grain": ["Agri"],
     "Insulating Membrane": ["Refinery/Starport"],
     "Liquid Oxygen": ["Refinery"],
     "Medical Diagnostic Equipment": ["HighTech"],
     "Non-Lethal Weapons": ["HighTech", "Military"],
+    "Land Enrichment Systems": ["HighTech"],
     "Polymers": ["Refinery"],
+    "Pesticides": ["HighTech"],
     "Power Generators": ["Industrial"],
     "Semiconductors": ["Refinery"],
+    "Survival Equipment": ["Industrial"],
     "Steel": ["Refinery"],
+    "Structural Regulators": ["HighTech/CraterOutpost"],
+    "Surface Stabilisers": ["Refinery/CraterOutpost"],
     "Superconductors": ["Refinery"],
     "Titanium": ["Refinery"],
     "Water": ["Agri", "Extraction/CraterOutpost"],
     "Water Purifiers": ["Industrial"],
+}
+
+CONSTANT_BUY_LOCATIONS = {
+    # system/starport
+    "Emergency Power Cells": [
+        "Alrai/Bounds Hub",
+        "LFT 1748/Otiman Dock",
+        "BD+75 58/Stephenson Station",
+        "LHS 1663/Frobisher City",
+        "Aktzin/Feoktistov Station"
+        "HR 244/Kepler City",
+        "Gladutjin/Chadwick Port",
+        "Apala/Wilson City",
+        "NLTT 13249/Lewis Orbital",
+        "Catuntinigi/Hui Enterprise",
+        "LTT 17102/Velazquez Ring"
+    ]
 }

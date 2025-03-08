@@ -1,7 +1,7 @@
 import math
 from sqlalchemy import func
 
-from server.constants import WHAT_MAKES_THIS
+from server.constants import WHAT_MAKES_THIS, CONSTANT_BUY_LOCATIONS
 from server.database.database import Station, StarSystem, database
 
 
@@ -71,18 +71,29 @@ def find_stations(commodity_list, user_location):
     result = {}
     for key, value in commodity_list:
         station_type = WHAT_MAKES_THIS[key]
-        nearest_station = find_nearest_station(station_type, user_location)
-        result[key] = [nearest_station, value]
-        #copper = [Dadeleus, 400]
+        if station_type[0] == "Constant":
+            buy_locations = CONSTANT_BUY_LOCATIONS[key]
+            buy_systems = []
+            for location in buy_locations:
+                buy_systems.append(location.split("/")[0])
+            nearest_station = find_nearest_station(
+                station_type[1:], user_location, buy_systems
+            )
+            result[key] = [nearest_station, value]
+        else:
+            nearest_station = find_nearest_station(station_type, user_location, None)
+            result[key] = [nearest_station, value]
+    # copper = [Dadeleus, 400]
     return result
 
 
-def find_nearest_station(economy: str, user_location: str):
-    """Finds the nearest station for that economy
+def find_nearest_station(economy: list[str], user_location: str, system_list: list = None):
+    """Finds the nearest station for that economy from a set list of systems
 
     Args:
         economy (str): the economy. see WHAT_MAKES_THIS
         user_location (str): user location (e.g Sol)
+        system_list (list): list of systems to consider
 
     Returns:
         (station name, system name)
@@ -103,8 +114,13 @@ def find_nearest_station(economy: str, user_location: str):
         + func.pow(StarSystem.height - userz, 2)
     )
 
+    if system_list:
+        filter_condition = StarSystem.system_name.in_(system_list)
+    else:
+        filter_condition = True
+
     nearest_station = None
-    if '/' in economy:
+    if "/" in economy:
         location = economy.split("/")[1]
         economy = economy.split("/")[0]
         nearest_station = (
@@ -114,7 +130,24 @@ def find_nearest_station(economy: str, user_location: str):
                 distance_formula.label("distance"),
             )
             .join(StarSystem, Station.star_system == StarSystem.system_name)
-            .filter(Station.economy == economy, Station.station_type == location)
+            .filter(
+                Station.economy == economy,
+                Station.station_type == location,
+                filter_condition,
+            )
+            .order_by(distance_formula)
+            .first()
+        )
+    elif "!" in economy:
+        #all but
+        nearest_station = (
+            database.session.query(
+                Station.station_name,
+                Station.star_system,
+                distance_formula.label("distance"),
+            )
+            .join(StarSystem, Station.star_system == StarSystem.system_name)
+            .filter(Station.economy != economy, filter_condition)
             .order_by(distance_formula)
             .first()
         )
@@ -126,7 +159,7 @@ def find_nearest_station(economy: str, user_location: str):
                 distance_formula.label("distance"),
             )
             .join(StarSystem, Station.star_system == StarSystem.system_name)
-            .filter(Station.economy == economy)
+            .filter(Station.economy == economy, filter_condition)
             .order_by(distance_formula)
             .first()
         )
