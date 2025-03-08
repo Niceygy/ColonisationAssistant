@@ -79,6 +79,7 @@ class UserData(database.Model):
     ID = Column(Integer, primary_key=True, autoincrement=True)
     system_name = Column(String(255))
     jsondata = Column(JSON)
+    squadron = Column(String(255))
 
 
 def system_coordinates(system_name, database):

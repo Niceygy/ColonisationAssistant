@@ -1,7 +1,7 @@
 from server.database.database import database, UserData
 import json
 
-def save_to_share(commodities, system_name):
+def save(commodities, system_name, squadron):
     """Saves it to the db
 
     Args:
@@ -14,12 +14,23 @@ def save_to_share(commodities, system_name):
     data = json.dumps(commodities)
     new_entry = UserData(
         system_name=system_name,
-        jsondata=data
+        jsondata=data,
+        squadron=squadron
     )
     database.session.add(new_entry)
     database.session.commit()
     return new_entry.ID
 
+def find(squadron):
+    qry_res = database.session.query(
+        UserData.jsondata, UserData.system_name
+    ).filter(UserData.squadron == squadron).all()
+    result = []
+    for item in qry_res:
+        result.append(item.system_name)
+    return result
+
+    
 def load(ID):
     qry_res = database.session.query(
         UserData.jsondata, UserData.system_name
@@ -28,9 +39,10 @@ def load(ID):
     commodities = str(json.loads(data))
     commodities = commodities.replace("[", "").replace("]", "").replace('"', '').split(",")  # Decode JSON string back into array
     return (commodities, qry_res.system_name)
-
+    
 def update_shared(ID, commodities, system_name):
     qry_res = database.session.query(
         UserData.jsondata, UserData.system_name
     ).filter(UserData.ID == ID).first()
+    
     

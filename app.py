@@ -18,7 +18,7 @@ from server.constants import (
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-from server.database.share import save_to_share, load
+from server.database.share import save, load
 from server.commodities import get_required_items
 
 
@@ -118,7 +118,7 @@ def generate_sharecode():
     if session.get("loaded_from_db"):
         sharecode = session.get("sharecode")
     else:
-        sharecode = save_to_share(selected_commodities, selected_system)
+        sharecode = save(selected_commodities, selected_system)
     return sharecode
 
 

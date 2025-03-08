@@ -13,10 +13,10 @@ docker push ghcr.io/niceygy/colonisationassistant:latest
 
 #Update local container
 
-# cd /opt/stacks/powerplay_assistant
+cd /opt/stacks/elite_apps
 
-# docker compose pull
+docker compose pull
 
-# docker compose down
+docker compose down
 
-# docker compose up -d
+docker compose up -d
