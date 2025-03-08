@@ -27,7 +27,7 @@ def find(squadron):
     ).filter(UserData.squadron == squadron).all()
     result = []
     for item in qry_res:
-        result.append(item.system_name)
+        result.append([item.system_name, item.id])
     return result
 
     
@@ -44,5 +44,8 @@ def update_shared(ID, commodities, system_name):
     qry_res = database.session.query(
         UserData.jsondata, UserData.system_name
     ).filter(UserData.ID == ID).first()
+    qry_res.jsondata = json.dumps(commodities)
+    qry_res.system_name = system_name
+    database.session.commit()
     
     

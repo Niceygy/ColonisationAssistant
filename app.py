@@ -18,8 +18,9 @@ from server.constants import (
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-from server.database.share import save, load
+from server.database.share import find, save, load
 from server.commodities import get_required_items
+from server.inara.inara import get_cmdr_info
 
 
 """
@@ -121,10 +122,37 @@ def generate_sharecode():
         sharecode = save(selected_commodities, selected_system)
     return sharecode
 
+@app.route("/inara", methods=["GET", "POST"])
+def inara():
+    if request.method == "GET":
+        return render_template("inara.html")
+    else:
+        apikey = request.form.get("apikey")
+        cmdrname = request.form.get("cmdrname")
+        rawdata = get_cmdr_info(apikey, cmdrname)
+        squadron = rawdata["eventData"]["commanderSquadron"]["SquadronID"]
+        session["squadron"] = squadron
+        return redirect(url_for("index"))
+        
 
-@app.route("/update_shared", methods=["GET", "POST"])
+@app.route("/shared", methods=["GET", "POST"])
 def update_shared():
-    id = session.get("shortcode")
+    if request.method == "GET":
+        #get info
+        squadron = request.args.get("sq")
+        id = request.args.get("id")
+        if id == "":
+            #find
+            return find(squadron)
+        else:
+            return load(id)
+    else:
+        jsondata = request.args.get("jsondata")
+        system_name = request.args.get("system_name")
+        id = request.args.get("id")
+        update_shared(id, jsondata, system_name)
+        
+        
 
 
 @app.route("/search_systems", methods=["GET"])
