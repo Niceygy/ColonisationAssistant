@@ -1,8 +1,5 @@
 FROM python:slim-bullseye
 
-# Install dependencies
-# RUN apt-get update && apt-get install -y nginx && apt-get clean
-
 # Copy application code
 COPY . /home/
 
@@ -15,10 +12,9 @@ RUN pip install -r requirements.txt
 # Expose ports
 EXPOSE 5005
 
-# Label
+# Labels
+LABEL org.opencontainers.image.description="Colonisation assiatant"
+LABEL org.opencontainers.image.authors="Niceygy (Ava Whale)"
 
-LABEL org.opencontainers.image.description Colonisation assiatant
-LABEL org.opencontainers.image.authors Niceygy (Ava Whale)
-
-# Start Nginx and Gunicorn
+# Start Gunicorn
 CMD gunicorn -c gunicorn_config.py app:app
