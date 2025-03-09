@@ -43,7 +43,7 @@
     <div class="specifyTask">
     <h2>Specify station:</h2>
     <form action="/" method="post">
-        <label for="system">Near System:</label>
+        <label for="system">In System:</label>
         <input list="system-results" id="system" name="system" oninput="searchSystems()" autocomplete="off">
         <datalist id="system-results"></datalist><br><br>
         
@@ -66,7 +66,7 @@
         <br>
         <button type="submit" onclick="toggleLoadingBtn()">Import!</button>
     </form> -->
-    <button onclick="redirect('/logon')">Find squadron systems</button>
+    <!-- <button onclick="redirect('/logon')">Find squadron systems</button> -->
     <div class="loadingIcon" style="float: right;">
         <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
     </div>

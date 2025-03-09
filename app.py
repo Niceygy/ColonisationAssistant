@@ -78,6 +78,7 @@ def index():
         elif request.method == "POST":
             session["selected_type"] = request.form.get("station_types")
             session["selected_system"] = request.form.get("system")
+            session["redirect"] = False
             return redirect(url_for("results"))
     except Exception as e:
         return uhoh(str(e))
@@ -86,41 +87,50 @@ def index():
 @app.route("/results", methods=["GET"])
 def results():
     try:
-        selected_station_type = session.get("selected_type", [])
-        selected_system = session.get("selected_system", "")
-        commodities = get_required_items(selected_station_type)
-        stations = find_stations(commodities, selected_system)
-        return render_template("results.html", data=stations, system=selected_system, stype=selected_station_type)
+        if session.get("redirect", False):
+            # rederict
+            selected_station_type = session.get("selected_type", [])
+            selected_system = session.get("selected_system", "")
+            commodities = session.get("selected_commodities", None)
+            if commodities == None:
+                commodities = get_required_items(selected_station_type)
+            stations = find_stations(commodities, selected_system)
+            values = session.get("user_progress")
+            return render_template(
+                "results.html",
+                data=stations,
+                system=selected_system,
+                stype=selected_station_type,
+                values=values,
+            )
+        else:
+            selected_station_type = session.get("selected_type", [])
+            selected_system = session.get("selected_system", "")
+            commodities = get_required_items(selected_station_type)
+            stations = find_stations(commodities, selected_system)
+
+            return render_template(
+                "results.html",
+                data=stations,
+                system=selected_system,
+                stype=selected_station_type,
+                values=[],
+            )
     except Exception as e:
         return uhoh(str(e))
 
 
-@app.route("/import", methods=["GET", "POST"])
-def importdata():
-    id = None
-    if request.method == "GET":
-        id = request.args.get("b64")
-    else:
-        id = request.form.get("b64")
-    commodities, system = load(id)
-    print(f"commodities {list(commodities)} / system {system}")
-    session["selected_commodities"] = commodities
-    session["selected_system"] = system
-    session["loaded_from_db"] = True
-    session["sharecode"] = id
-    return redirect(url_for("results"))
-
-
-@app.route("/sharecode", methods=["GET", "POST"])
+@app.route("/sharecode", methods=["POST"])
 def generate_sharecode():
-    selected_commodities = session.get("selected_commodities", [])
+    selected_commodities = request.json.get(
+        "values"
+    )  # Use the values from the POST request
     selected_system = session.get("selected_system", "")
-    sharecode = None
-    if session.get("loaded_from_db"):
-        sharecode = session.get("sharecode")
-    else:
-        sharecode = save(selected_commodities, selected_system)
-    return sharecode
+    selected_type = session.get("selected_type", "")
+    squadron = session.get("squadron", "Nightspeed LLC")
+    sharecode = save(selected_commodities, selected_system, selected_type, squadron)
+    return str(sharecode)
+
 
 @app.route("/logon", methods=["GET", "POST"])
 def inara():
@@ -129,19 +139,21 @@ def inara():
     else:
         sq = request.form.get("sq")
         session["squadron"] = sq
-        
-        # cmdrname = request.form.get("cmdrname")
-        # rawdata = get_cmdr_info(apikey, cmdrname)
-        # squadron = rawdata["eventData"]["commanderSquadron"]["SquadronID"]
-        #  squadron
         return redirect(url_for("index"))
-        
+
 
 @app.route("/userdata/get", methods=["GET"])
 def get_entry():
-    name = request.args.get("sq")
-    return find(name)
-    
+    id = request.args.get("id")
+    user_progress, system_name, station_type = load(id)
+    session["selected_type"] = station_type
+    session["selected_system"] = system_name
+    session["selected_commodities"] = get_required_items(station_type)
+    session["user_progress"] = user_progress
+    session["redirect"] = True
+    return redirect(url_for("results"))
+
+
 @app.route("/userdata/search", methods=["GET", "POST"])
 def search_sq_systems():
     if request.method == "GET":
@@ -150,7 +162,12 @@ def search_sq_systems():
         id = request.form.get("id")
         jsondata, system_name = load(id)
         station_type = jsondata["type"]
-                
+        commodities = jsondata["count"]
+        session["selected_type"] = station_type
+        session["selected_system"] = system_name
+        session["count"] = commodities
+        print(f"type: {station_type}\nsystem: {system_name}\ncount: {commodities}")
+        return redirect(url_for("results"))
 
 
 @app.route("/search_systems", methods=["GET"])
@@ -164,9 +181,11 @@ def search_systems():
 def favicon():
     return send_from_directory(app.static_folder, "favicon.ico")
 
+
 @app.route("/js/util.js")
 def js_util():
     return send_from_directory(app.static_folder, "js/util.js")
+
 
 @app.route("/changelog", methods=["GET"])
 def changelog():

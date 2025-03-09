@@ -24,10 +24,19 @@ function copyText(text) {
   }
 }
 
-function get_sharecode() {
-  fetch("{{ url_for('generate_sharecode') }}")
+function get_sharecode(values) {
+  fetch("/sharecode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ values: values }),
+  })
     .then((response) => response.text())
-    .then((text) => copyText(text));
+    .then((text) => {
+      const shareUrl = `${window.location.origin}/userdata/get?id=${text}`;
+      copyText(shareUrl);
+    });
 }
 
 

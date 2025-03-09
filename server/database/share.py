@@ -1,12 +1,14 @@
 from server.database.database import database, UserData
 import json
 
-def save(commodities, system_name, squadron):
+def save(commodities, system_name, station_type, squadron):
     """Saves it to the db
 
     Args:
-        commodities (str[]): commdites list
+        commodities (str[]): commodities list
         system_name (str): system name as str
+        station_type (str): station type as str
+        squadron (str): squadron name as str
 
     Returns:
         int: the ID of the data
@@ -15,6 +17,7 @@ def save(commodities, system_name, squadron):
     new_entry = UserData(
         system_name=system_name,
         jsondata=data,
+        station_type=station_type,
         squadron=squadron
     )
     database.session.add(new_entry)
@@ -33,12 +36,10 @@ def find(squadron):
     
 def load(ID):
     qry_res = database.session.query(
-        UserData.jsondata, UserData.system_name
+        UserData.jsondata, UserData.system_name, UserData.station_type
     ).filter(UserData.ID == ID).first()
-    data = json.dumps(qry_res.jsondata)  # Ensure commodities are encoded as JSON string
-    commodities = json.loads(data)
-    commodities = commodities.replace("[", "").replace("]", "").replace('"', '').split(",")  # Decode JSON string back into array
-    return (commodities, qry_res.system_name)
+    data = json.loads(qry_res.jsondata)
+    return (data, qry_res.system_name, qry_res.station_type)
     
 def update_shared(ID, commodities, system_name):
     qry_res = database.session.query(
@@ -47,5 +48,4 @@ def update_shared(ID, commodities, system_name):
     qry_res.jsondata = json.dumps(commodities)
     qry_res.system_name = system_name
     database.session.commit()
-    
-    
+

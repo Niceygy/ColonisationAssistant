@@ -27,15 +27,26 @@
         }
 
         function restore() {
-          values = document.cookie.toString().split(",")
+          values = window.localStorage["values"].toString().split(",")
           console.log("values " + values)
           setTextBoxValues(values)
         }
 
         function save() {
-          document.cookie = ""
-          document.cookie = getTextBoxValues()
+          window.localStorage["values"] = getTextBoxValues()
         }
+
+    function setTextBoxValues(values) {
+        const inputs = document.querySelectorAll('input[type="text"]');
+        inputs.forEach((input, index) => {
+            input.value = values[index] || '';
+        });
+    }
+
+    window.onload = function() {
+        const savedValues = "{{ values|tojson }}";
+        setTextBoxValues(savedValues);
+    }
     </script>
   </head>
   <body>
@@ -54,7 +65,9 @@
     {% endfor %}
 
     <br />
-    <button onclick="save()">Save Locally</button>
+    
+    <button onclick="get_sharecode(getTextBoxValues())">Save</button>
+    
     <br />
 
 

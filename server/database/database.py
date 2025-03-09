@@ -80,6 +80,7 @@ class UserData(database.Model):
     system_name = Column(String(255))
     jsondata = Column(JSON)
     squadron = Column(String(255))
+    station_type = Column(String(255))
 
 
 def system_coordinates(system_name, database):
