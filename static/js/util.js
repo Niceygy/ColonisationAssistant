@@ -24,18 +24,21 @@ function copyText(text) {
   }
 }
 
-function get_sharecode(values) {
+/**
+ * Gets the sharecode from the server, and copies it
+ */
+function get_sharecode(values, id) {
   fetch("/sharecode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ values: values }),
+    body: JSON.stringify({ values: values, id: id, window: window.location.origin }),
   })
     .then((response) => response.text())
     .then((text) => {
-      const shareUrl = `${window.location.origin}/userdata/get?id=${text}`;
-      copyText(shareUrl);
+      // const shareUrl = `${window.location.origin}/userdata/get?id=${text}`;
+      copyText(text);
     });
 }
 

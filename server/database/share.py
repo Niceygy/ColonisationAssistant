@@ -41,11 +41,10 @@ def load(ID):
     data = json.loads(qry_res.jsondata)
     return (data, qry_res.system_name, qry_res.station_type)
     
-def update_shared(ID, commodities, system_name):
+def update(ID, commodities):
     qry_res = database.session.query(
         UserData.jsondata, UserData.system_name
     ).filter(UserData.ID == ID).first()
     qry_res.jsondata = json.dumps(commodities)
-    qry_res.system_name = system_name
     database.session.commit()
 

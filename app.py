@@ -18,7 +18,7 @@ from server.constants import (
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-from server.database.share import find, save, load
+from server.database.share import find, save, load, update
 from server.commodities import get_required_items
 from server.inara.inara import get_cmdr_info
 
@@ -92,6 +92,7 @@ def results():
             selected_station_type = session.get("selected_type", [])
             selected_system = session.get("selected_system", "")
             commodities = session.get("selected_commodities", None)
+            
             if commodities == None:
                 commodities = get_required_items(selected_station_type)
             stations = find_stations(commodities, selected_system)
@@ -102,6 +103,7 @@ def results():
                 system=selected_system,
                 stype=selected_station_type,
                 values=values,
+                id=id,
             )
         else:
             selected_station_type = session.get("selected_type", [])
@@ -115,6 +117,7 @@ def results():
                 system=selected_system,
                 stype=selected_station_type,
                 values=[],
+                id=id,
             )
     except Exception as e:
         return uhoh(str(e))
@@ -128,18 +131,18 @@ def generate_sharecode():
     selected_system = session.get("selected_system", "")
     selected_type = session.get("selected_type", "")
     squadron = session.get("squadron", "Nightspeed LLC")
-    sharecode = save(selected_commodities, selected_system, selected_type, squadron)
-    return str(sharecode)
-
-
-@app.route("/logon", methods=["GET", "POST"])
-def inara():
-    if request.method == "GET":
-        return render_template("inara.html")
+    
+    id = request.json.get("id")
+    print(id)
+    if id != "-1":
+        print("-1")
+        update(id, selected_commodities)
+        window = request.json.get("window")
+        return f"{window}/userdata/get?id={id}"
     else:
-        sq = request.form.get("sq")
-        session["squadron"] = sq
-        return redirect(url_for("index"))
+        sharecode = save(selected_commodities, selected_system, selected_type, squadron)
+        window = request.json.get("window")
+        return f"{window}/userdata/get?id={sharecode}"
 
 
 @app.route("/userdata/get", methods=["GET"])
@@ -151,24 +154,8 @@ def get_entry():
     session["selected_commodities"] = get_required_items(station_type)
     session["user_progress"] = user_progress
     session["redirect"] = True
+    session["id"] = id
     return redirect(url_for("results"))
-
-
-@app.route("/userdata/search", methods=["GET", "POST"])
-def search_sq_systems():
-    if request.method == "GET":
-        return render_template("sq_search.html")
-    else:
-        id = request.form.get("id")
-        jsondata, system_name = load(id)
-        station_type = jsondata["type"]
-        commodities = jsondata["count"]
-        session["selected_type"] = station_type
-        session["selected_system"] = system_name
-        session["count"] = commodities
-        print(f"type: {station_type}\nsystem: {system_name}\ncount: {commodities}")
-        return redirect(url_for("results"))
-
 
 @app.route("/search_systems", methods=["GET"])
 def search_systems():
@@ -179,7 +166,7 @@ def search_systems():
 
 @app.route("/favicon.ico")
 def favicon():
-    return send_from_directory(app.static_folder, "favicon.ico")
+    return send_from_directory(app.static_folder, "icons/favicon.ico")
 
 
 @app.route("/js/util.js")

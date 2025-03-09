@@ -46,7 +46,7 @@
     window.onload = function() {
         const savedValues = {{ values|tojson }};
         console.log(savedValues)
-        if (savedValues == "[]")
+        if (savedValues == [])
         {
           setTextBoxValues([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         } else {
@@ -72,7 +72,7 @@
 
     <br />
     
-    <button onclick="get_sharecode(getTextBoxValues())">Save</button>
+    <button onclick="get_sharecode(getTextBoxValues(), '{{id}}')">Save</button>
     
     <br />
 
