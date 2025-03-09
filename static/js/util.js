@@ -39,6 +39,7 @@ function get_sharecode(values, id) {
     .then((text) => {
       // const shareUrl = `${window.location.origin}/userdata/get?id=${text}`;
       copyText(text);
+      alert("Please open the share url yourself, so if you press save again it updates the same sharecode (not makes a new one)")
     });
 }
 

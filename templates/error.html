@@ -14,11 +14,11 @@
     <p><strong>Architect's Notepad has run into an issue!</strong></p>
     <p>Unfortunately, it seems that Architect's Notepad has gone wrong.</p>
     <!-- <p></p> -->
-    <p>If this keeps happening, please contact me <a href="https://go.niceygy.net/powerplay_assist_thread">here</a>, and quote the following:</p>
+    <p>If this keeps happening, please contact me <a href="https://go.niceygy.net/arch_notpad_thread">here</a>, and quote the following:</p>
 
     <p><i>ERROR CODE: {{ ERRORCODE }} ({{ ERRORDATA }})</i></p>
     <br>
-    <p>Please also include what task, power & system you selected!</p>
+    <p>Please also include what system & station type you selected, as well as if you were using a sharecode!</p>
     <br>
 
 </body>
@@ -26,7 +26,3 @@
     <a href="{{ url_for('index') }}">Home</a>
 </div>
 </html>
-
-<!-- 
-30 7 * * 4 /bin/bash -c 'if [ -f /var/elite/cycle.txt ]; then cycle=$(cat /var/elite/cycle.txt); if [ "$cycle" -eq 6 ]; then echo 1 > /var/elite/cycle.txt; else echo $((cycle + 1)) > /var/elite/cycle.txt; fi; else echo 1 > /var/elite/cycle.txt; fi'
--->
