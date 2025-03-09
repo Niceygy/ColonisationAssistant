@@ -44,9 +44,15 @@
     }
 
     window.onload = function() {
-        const savedValues = "{{ values|tojson }}";
-        setTextBoxValues(savedValues);
-    }
+        const savedValues = {{ values|tojson }};
+        console.log(savedValues)
+        if (savedValues == "[]")
+        {
+          setTextBoxValues([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+        } else {
+          setTextBoxValues(savedValues);
+        }
+      }
     </script>
   </head>
   <body>
