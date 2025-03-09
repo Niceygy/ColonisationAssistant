@@ -92,7 +92,7 @@ def results():
             selected_station_type = session.get("selected_type", [])
             selected_system = session.get("selected_system", "")
             commodities = session.get("selected_commodities", None)
-            
+            id = session.get("id")
             if commodities == None:
                 commodities = get_required_items(selected_station_type)
             stations = find_stations(commodities, selected_system)
@@ -117,7 +117,7 @@ def results():
                 system=selected_system,
                 stype=selected_station_type,
                 values=[],
-                id=id,
+                id="-1",
             )
     except Exception as e:
         return uhoh(str(e))
@@ -131,11 +131,8 @@ def generate_sharecode():
     selected_system = session.get("selected_system", "")
     selected_type = session.get("selected_type", "")
     squadron = session.get("squadron", "Nightspeed LLC")
-    
     id = request.json.get("id")
-    print(id)
     if id != "-1":
-        print("-1")
         update(id, selected_commodities)
         window = request.json.get("window")
         return f"{window}/userdata/get?id={id}"

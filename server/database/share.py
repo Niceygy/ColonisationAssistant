@@ -42,9 +42,7 @@ def load(ID):
     return (data, qry_res.system_name, qry_res.station_type)
     
 def update(ID, commodities):
-    qry_res = database.session.query(
-        UserData.jsondata, UserData.system_name
-    ).filter(UserData.ID == ID).first()
+    qry_res = database.session.query(UserData).filter(UserData.ID == ID).first()
     qry_res.jsondata = json.dumps(commodities)
     database.session.commit()
 
