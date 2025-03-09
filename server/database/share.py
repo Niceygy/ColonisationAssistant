@@ -36,7 +36,7 @@ def load(ID):
         UserData.jsondata, UserData.system_name
     ).filter(UserData.ID == ID).first()
     data = json.dumps(qry_res.jsondata)  # Ensure commodities are encoded as JSON string
-    commodities = str(json.loads(data))
+    commodities = json.loads(data)
     commodities = commodities.replace("[", "").replace("]", "").replace('"', '').split(",")  # Decode JSON string back into array
     return (commodities, qry_res.system_name)
     

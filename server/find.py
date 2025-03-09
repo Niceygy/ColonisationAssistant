@@ -70,6 +70,9 @@ def find_stations(commodity_list, user_location):
     # make a list of each type we need
     result = {}
     for key, value in commodity_list:
+        if not key in WHAT_MAKES_THIS:
+            print(key)
+            continue
         station_type = WHAT_MAKES_THIS[key]
         if station_type[0] == "Constant":
             buy_locations = CONSTANT_BUY_LOCATIONS[key]

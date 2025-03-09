@@ -94,6 +94,7 @@ WHAT_MAKES_THIS = {
     "Insulating Membrane": ["Refinery/Starport"],
     "Liquid Oxygen": ["Refinery"],
     "Medical Diagnostic Equipment": ["HighTech"],
+    "Micro Controllers": ["HighTech"],
     "Non-Lethal Weapons": ["HighTech", "Military"],
     "Land Enrichment Systems": ["HighTech"],
     "Polymers": ["Refinery"],

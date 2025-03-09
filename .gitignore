@@ -175,3 +175,4 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+server/__pycache__/constants.cpython-310.pyc

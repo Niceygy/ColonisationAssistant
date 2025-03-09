@@ -15,9 +15,11 @@
     <h2>Login with inara</h2>
     <p>Please enter your inara api key, and commander name.</p>
     <p>This allows Architect's Notepad to see what squadron you're in, so you can share a search result with them.</p>
-    <form action="/inara" method="post">
-    <input type="text" id="apikey">API KEY</input>
-    <input type="text" id="cmdrname">CMDR NAME</input>
+    <form action="/logon" method="post">
+    <p>squadron Name:</p>
+        <input type="text" id="sq" name="sq"></input>
+        <br> </br>
+    <!-- <input type="text" id="cmdrname">CMDR NAME</input> -->
     <button type="submit">Go!</button>
 </form>
     <br>

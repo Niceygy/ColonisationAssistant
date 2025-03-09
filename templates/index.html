@@ -6,6 +6,7 @@
     <title>Architect's Notepad</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <script defer src="https://data.niceygy.net/script.js" data-website-id="cf44cb82-ef40-43b4-a9ea-5e0c4e27e90a"></script>
+    <script src="js/util.js"></script>
     <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" type="image/x-icon">
     <meta name='description' content='Architects Notepad is a compainon website for Elite: Dangerous, to help commanders with colonising new star systems.'>
     <script defer>
@@ -65,6 +66,7 @@
         <br>
         <button type="submit" onclick="toggleLoadingBtn()">Import!</button>
     </form> -->
+    <button onclick="redirect('/logon')">Find squadron systems</button>
     <div class="loadingIcon" style="float: right;">
         <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
     </div>

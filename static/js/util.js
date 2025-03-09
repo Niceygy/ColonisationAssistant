@@ -31,6 +31,6 @@ function get_sharecode() {
 }
 
 
-function saveLocally() {
-  
+function redirect(url) {
+  window.location.href = url
 }

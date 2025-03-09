@@ -122,37 +122,35 @@ def generate_sharecode():
         sharecode = save(selected_commodities, selected_system)
     return sharecode
 
-@app.route("/inara", methods=["GET", "POST"])
+@app.route("/logon", methods=["GET", "POST"])
 def inara():
     if request.method == "GET":
         return render_template("inara.html")
     else:
-        apikey = request.form.get("apikey")
-        cmdrname = request.form.get("cmdrname")
-        rawdata = get_cmdr_info(apikey, cmdrname)
-        squadron = rawdata["eventData"]["commanderSquadron"]["SquadronID"]
-        session["squadron"] = squadron
+        sq = request.form.get("sq")
+        session["squadron"] = sq
+        
+        # cmdrname = request.form.get("cmdrname")
+        # rawdata = get_cmdr_info(apikey, cmdrname)
+        # squadron = rawdata["eventData"]["commanderSquadron"]["SquadronID"]
+        #  squadron
         return redirect(url_for("index"))
         
 
-@app.route("/shared", methods=["GET", "POST"])
-def update_shared():
+@app.route("/userdata/get", methods=["GET"])
+def get_entry():
+    name = request.args.get("sq")
+    return find(name)
+    
+@app.route("/userdata/search", methods=["GET", "POST"])
+def search_sq_systems():
     if request.method == "GET":
-        #get info
-        squadron = request.args.get("sq")
-        id = request.args.get("id")
-        if id == "":
-            #find
-            return find(squadron)
-        else:
-            return load(id)
+        return render_template("sq_search.html")
     else:
-        jsondata = request.args.get("jsondata")
-        system_name = request.args.get("system_name")
-        id = request.args.get("id")
-        update_shared(id, jsondata, system_name)
-        
-        
+        id = request.form.get("id")
+        jsondata, system_name = load(id)
+        station_type = jsondata["type"]
+                
 
 
 @app.route("/search_systems", methods=["GET"])
