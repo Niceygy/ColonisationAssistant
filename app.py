@@ -95,7 +95,7 @@ def results_seleced():
             commodities.append([item, 0])
         system = request.form.get("system")
         stations = find_stations(commodities, system)
-        return stations
+        return render_template("results.html", data=stations, values=[], system=system, stype="Manual Mode: Unknown")
     except Exception as e:
         return uhoh(e)
 
