@@ -1,5 +1,3 @@
-DATABASE_CONNECTION_STRING = "mysql+pymysql://assistant:6548@10.0.0.52/elite"
-
 STATION_TYPES = [
     "Coriolis",
     "Asteroid Base",

@@ -12,30 +12,29 @@ from flask import (
 )
 from contextlib import contextmanager
 from server.constants import (
-    DATABASE_CONNECTION_STRING,
-    STATION_TYPES,
+    STATION_TYPES
 )
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
-from server.database.share import find, save, load, update
+from server.database.share import save, load, update
 from server.commodities import get_required_items
-from server.inara.inara import get_cmdr_info
-
+from dotenv import load_dotenv
+import os
 
 """
 Flask and database
 """
 
-# database = SQLAlchemy()
-
+load_dotenv()
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_CONNECTION_STRING
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_CONNECTION_STRING')
 app.config["SQLALCHEMY_POOL_SIZE"] = 10
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 30
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 app.config["SQLALCHEMY_MAX_OVERFLOW"] = 20
-app.secret_key = "supersecretkey"
+app.config["SECRET_KEY"] = os.getenv("SESSION_KEY")
 database.init_app(app)
 
 

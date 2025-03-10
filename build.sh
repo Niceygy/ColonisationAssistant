@@ -2,6 +2,10 @@
 
 clear
 
+rm requirements.txt
+
+pip freeze >> requirements.txt
+
 # Build the Docker image
 docker build -t niceygy/colonyassistant .
 
