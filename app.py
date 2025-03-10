@@ -89,8 +89,13 @@ def index():
 @app.route("/selected", methods=["GET", "POST"])
 def results_seleced():
     try:
-        items = request.form.get("commodities")
-        return items
+        items = request.form.getlist("commodities")
+        commodities = []
+        for item in items:
+            commodities.append([item, 0])
+        system = request.form.get("system")
+        stations = find_stations(commodities, system)
+        return stations
     except Exception as e:
         return uhoh(e)
 
