@@ -1,5 +1,6 @@
 print("Loading...")
 
+# External Imports
 from flask import (
     Flask,
     jsonify,
@@ -11,16 +12,18 @@ from flask import (
     session,
 )
 from contextlib import contextmanager
-from server.constants import (
-    STATION_TYPES
-)
+from dotenv import load_dotenv
+import os
+
+# Local Files
+from server.constants import STATION_TYPES
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
 from server.database.share import save, load, update
 from server.commodities import get_required_items
-from dotenv import load_dotenv
-import os
+from server.auth.fdev import configure_oauth
+
 
 """
 Flask and database
@@ -29,13 +32,14 @@ Flask and database
 load_dotenv()
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_CONNECTION_STRING')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECTION_STRING")
 app.config["SQLALCHEMY_POOL_SIZE"] = 10
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 30
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 app.config["SQLALCHEMY_MAX_OVERFLOW"] = 20
 app.config["SECRET_KEY"] = os.getenv("SESSION_KEY")
 database.init_app(app)
+configure_oauth(app)
 
 
 @contextmanager
@@ -87,15 +91,17 @@ def index():
 def results():
     try:
         if session.get("redirect", False):
-            # rederict
+            # This is a redirect from /userdata/get
             selected_station_type = session.get("selected_type", [])
             selected_system = session.get("selected_system", "")
             commodities = session.get("selected_commodities", None)
             id = session.get("id")
+            # Just In Case!
             if commodities == None:
                 commodities = get_required_items(selected_station_type)
             stations = find_stations(commodities, selected_system)
             values = session.get("user_progress")
+            # Also include the ID, to avoid creating new entries when not needed
             return render_template(
                 "results.html",
                 data=stations,
@@ -105,6 +111,7 @@ def results():
                 id=id,
             )
         else:
+            # From main page, id of -1 means it doesn't exist
             selected_station_type = session.get("selected_type", [])
             selected_system = session.get("selected_system", "")
             commodities = get_required_items(selected_station_type)
@@ -124,40 +131,55 @@ def results():
 
 @app.route("/sharecode", methods=["POST"])
 def generate_sharecode():
-    selected_commodities = request.json.get(
-        "values"
-    )  # Use the values from the POST request
-    selected_system = session.get("selected_system", "")
-    selected_type = session.get("selected_type", "")
-    squadron = session.get("squadron", "Nightspeed LLC")
-    id = request.json.get("id")
-    if id != "-1":
-        update(id, selected_commodities)
-        window = request.json.get("window")
-        return f"{window}/userdata/get?id={id}"
-    else:
-        sharecode = save(selected_commodities, selected_system, selected_type, squadron)
-        window = request.json.get("window")
-        return f"{window}/userdata/get?id={sharecode}"
+    try:
+        selected_commodities = request.json.get("values")
+        selected_system = session.get("selected_system", "")
+        selected_type = session.get("selected_type", "")
+        squadron = session.get("squadron", "Nightspeed LLC")
+        id = request.json.get("id")
+        if id != "-1":
+            # Entry! Update old one
+            update(id, selected_commodities)
+            window = request.json.get("window")
+            return f"{window}/userdata/get?id={id}"
+        else:
+            # No entry! Make a new one
+            sharecode = save(
+                selected_commodities, selected_system, selected_type, squadron
+            )
+            window = request.json.get("window")
+            return f"{window}/userdata/get?id={sharecode}"
+    except Exception as e:
+        # Oopsie
+        return uhoh(e)
 
 
 @app.route("/userdata/get", methods=["GET"])
 def get_entry():
-    id = request.args.get("id")
-    user_progress, system_name, station_type = load(id)
-    session["selected_type"] = station_type
-    session["selected_system"] = system_name
-    session["selected_commodities"] = get_required_items(station_type)
-    session["user_progress"] = user_progress
-    session["redirect"] = True
-    session["id"] = id
-    return redirect(url_for("results"))
+    try:
+        id = request.args.get("id")
+        user_progress, system_name, station_type = load(id)
+        session["selected_type"] = station_type
+        session["selected_system"] = system_name
+        session["selected_commodities"] = get_required_items(station_type)
+        session["user_progress"] = user_progress
+        session["redirect"] = True
+        session["id"] = id
+        return redirect(url_for("results"))
+    except Exception as e:
+        return uhoh(e)
+
 
 @app.route("/search_systems", methods=["GET"])
 def search_systems():
     query = request.args.get("query")
     results = query_star_systems(query)
     return jsonify(results)
+
+
+"""
+Static files
+"""
 
 
 @app.route("/favicon.ico")
