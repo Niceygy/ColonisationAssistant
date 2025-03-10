@@ -28,7 +28,7 @@
 
         function restore() {
           values = window.localStorage["values"].toString().split(",")
-          console.log("values " + values)
+          // console.log("values " + values)
           setTextBoxValues(values)
         }
 
@@ -45,7 +45,7 @@
 
     window.onload = function() {
         const savedValues = {{ values|tojson }};
-        console.log(savedValues)
+        // console.log(savedValues)
         if (savedValues == [])
         {
           setTextBoxValues([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
@@ -65,11 +65,33 @@
     {% for key, item in data.items() %}
     <!-- Item = [Station, required_count] -->
     <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) 
-      <input type="text" value="0" onclick="event.stopPropagation();"> 
+      <input id="{{key}}" type="text" onclick="event.stopPropagation();"> 
       <p style="display:inline;">/ {{ item[1] }}</p>
     </li>
     {% endfor %}
 
+    <br />
+    <label for="item-select">Select Item:</label>
+    <select id="item-select">
+      {% for key, item in data.items() %}
+      <option value="{{ loop.index0 }}">{{ key }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" id="item-quantity">
+    <button onclick="addItem()">Add</button>
+    <br />
+    <script>
+      function addItem() {
+        const selectBox = document.getElementById('item-select');
+        var value = selectBox.value;
+        var text = selectBox.options[selectBox.selectedIndex].text;
+        var textbox = document.getElementById(text)
+        add_value = parseInt(document.getElementById("item-quantity").value)
+        old_value = parseInt(textbox.value)
+        new_value = old_value + add_value
+        textbox.value = new_value
+      }
+    </script>
     <br />
     
     <button onclick="get_sharecode(getTextBoxValues(), '{{id}}')">Save</button>

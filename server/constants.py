@@ -109,6 +109,8 @@ WHAT_MAKES_THIS = {
     "Water Purifiers": ["Industrial"],
 }
 
+COMMDOTIES = list(WHAT_MAKES_THIS.keys())
+
 CONSTANT_BUY_LOCATIONS = {
     # system/starport
     "Emergency Power Cells": [

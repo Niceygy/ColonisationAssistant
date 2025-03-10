@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 import os
 
 # Local Files
-from server.constants import STATION_TYPES
+from server.constants import STATION_TYPES, COMMDOTIES
 from server.database.database import database
 from server.database.search import query_star_systems
 from server.find import find_stations
@@ -77,7 +77,7 @@ Route Handlers
 def index():
     try:
         if request.method == "GET":
-            return render_template("index.html", station_types=STATION_TYPES)
+            return render_template("index.html", station_types=STATION_TYPES, items=COMMDOTIES)
         elif request.method == "POST":
             session["selected_type"] = request.form.get("station_types")
             session["selected_system"] = request.form.get("system")
@@ -86,6 +86,13 @@ def index():
     except Exception as e:
         return uhoh(str(e))
 
+@app.route("/selected", methods=["GET", "POST"])
+def results_seleced():
+    try:
+        items = request.form.get("commodities")
+        return items
+    except Exception as e:
+        return uhoh(e)
 
 @app.route("/results", methods=["GET"])
 def results():

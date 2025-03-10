@@ -38,6 +38,22 @@
             document.getElementById("loadingIcon").style.display = "none";
         }
     </script>
+    <script>
+        function getSelectedCommodities() {
+            const selectedCommodities = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedCommodities.push(checkbox.nextSibling.textContent.trim());
+            });
+            return selectedCommodities;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const selectedCommodities = getSelectedCommodities();
+            console.log(selectedCommodities);
+            // You can now send the selectedCommodities to the server or handle them as needed
+        }
+    </script>
 <body>
     <h1>Architect's Notepad</h1>
     <div class="specifyTask">
@@ -59,15 +75,23 @@
         
         <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
     </form>
+    <h2>Or select Commodities</h2>
+    <form action="/selected" method="post" onsubmit="handleSubmit(event)">
+        <label for="system">In System:</label>
+        <input list="system-results" id="system" name="system" oninput="searchSystems()" autocomplete="off">
+        <datalist id="system-results"></datalist><br><br>
+        
+        <label for="commodities">Commodities: </label>
+        <br></br>
+            {% for item in items %}
+            <li><input type="checkbox" > {{ item }} </input></li>
+            {% endfor %}
+        <br />
+        <br></br>
+        
+        <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
     <p>Please be aware that this site is under development!</p>
-    <!-- <form action="/import" method="post">
-        <h2>Import</h2>
-        <input name="b64" ></input>
-        <br>
-        <button type="submit" onclick="toggleLoadingBtn()">Import!</button>
-    </form> -->
-    <!-- <button onclick="redirect('/logon')">Find squadron systems</button> -->
-    <div class="loadingIcon" style="float: right;">
+        <div class="loadingIcon" style="float: right;">
         <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
     </div>
     </div>
