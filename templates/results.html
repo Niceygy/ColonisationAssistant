@@ -51,6 +51,7 @@
     </script>
   </head>
   <body>
+    <div style="text-align: center;">
     <h1>Selected Options</h1>
     <p><strong>System:</strong> {{ system }}</p>
     <p><strong>Station Type: </strong> {{ stype }}</p>
@@ -67,7 +68,7 @@
 
     <br />
     <label for="item-select">Select Item:</label>
-    <!-- deopdown box for autoadd -->
+    <!-- dropdown box for autoadd -->
     <select id="item-select">
       {% for key, item in data.items() %}
       <option value="{{ loop.index0 }}">{{ key }}</option>
@@ -87,5 +88,6 @@
 
 
     <a href="{{ url_for('index') }}">Back to Home</a>
+  </div>
   </body>
 </html>
