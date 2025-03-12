@@ -26,26 +26,21 @@
           });
         }
 
-        function restore() {
-          values = window.localStorage["values"].toString().split(",")
-          // console.log("values " + values)
-          setTextBoxValues(values)
-        }
+      /*AddItem: adds the inputted number to the selected box*/
+      function addItem() {
+        const selectBox = document.getElementById('item-select');
+        var value = selectBox.value;
+        var text = selectBox.options[selectBox.selectedIndex].text;
+        var textbox = document.getElementById(text)
+        add_value = parseInt(document.getElementById("item-quantity").value)
+        old_value = parseInt(textbox.value)
+        if (textbox.value == "") {old_value = 0}
+        new_value = old_value + add_value
+        textbox.value = new_value
+      }
 
-        function save() {
-          window.localStorage["values"] = getTextBoxValues()
-        }
-
-    function setTextBoxValues(values) {
-        const inputs = document.querySelectorAll('input[type="text"]');
-        inputs.forEach((input, index) => {
-            input.value = values[index] || '';
-        });
-    }
-
-    window.onload = function() {
+    document.onload = function() {
         const savedValues = {{ values|tojson }};
-        // console.log(savedValues)
         if (savedValues == [])
         {
           setTextBoxValues([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
@@ -72,6 +67,7 @@
 
     <br />
     <label for="item-select">Select Item:</label>
+    <!-- deopdown box for autoadd -->
     <select id="item-select">
       {% for key, item in data.items() %}
       <option value="{{ loop.index0 }}">{{ key }}</option>
@@ -81,16 +77,7 @@
     <button onclick="addItem()">Add</button>
     <br />
     <script>
-      function addItem() {
-        const selectBox = document.getElementById('item-select');
-        var value = selectBox.value;
-        var text = selectBox.options[selectBox.selectedIndex].text;
-        var textbox = document.getElementById(text)
-        add_value = parseInt(document.getElementById("item-quantity").value)
-        old_value = parseInt(textbox.value)
-        new_value = old_value + add_value
-        textbox.value = new_value
-      }
+
     </script>
     <br />
     
