@@ -1,130 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Architect's Notepad</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    <script defer src="https://data.niceygy.net/script.js" data-website-id="cf44cb82-ef40-43b4-a9ea-5e0c4e27e90a"></script>
-    <script src="js/util.js"></script>
-    <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" type="image/x-icon">
-    <meta name='description' content='Architects Notepad is a compainon website for Elite: Dangerous, to help commanders with colonising new star systems.'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
+    <script defer src="https://data.niceygy.net/script.js" data-website-id="cf44cb82-ef40-43b4-a9ea-5e0c4e27e90a" ></script>
+    <script defer src="{{ url_for('static', filename='js/util.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" type="image/x-icon"/>
+    <meta
+      name="description"
+      content="Architects Notepad is a compainon website for Elite: Dangerous, to help commanders with colonising new star systems."
+    />
+
     <script defer>
-        async function searchSystems(isTwo=false) {
-            let elementID = "system";
-            if (isTwo) {elementID = "manual_system";}
-            const query = document.getElementById(elementID).value;
-            const response = await fetch(`/search_systems?query=${query}`);
-            const results = await response.json();
-            const datalist = document.getElementById(elementID + '-results');
-            datalist.innerHTML = '';
-            results.forEach(system => {
-                const option = document.createElement('option');
-                option.value = system;
-                datalist.appendChild(option);
-            });
+      window.onload = function () {
+        document.getElementById("loadingIcon").style.display = "none";
+      };
+      async function searchSystems(isTwo = false) {
+        let elementID = "system";
+        if (isTwo) {
+          elementID = "manual_system";
         }
-        function toggleLoadingBtn() {
-            var x = document.getElementById("loadingIcon");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
+        const query = document.getElementById(elementID).value;
+        const response = await fetch(`/search_systems?query=${query}`);
+        const results = await response.json();
+        const datalist = document.getElementById(elementID + "-results");
+        datalist.innerHTML = "";
+        results.forEach((system) => {
+          const option = document.createElement("option");
+          option.value = system;
+          datalist.appendChild(option);
+        });
+      }
+
+      function toggleLoadingBtn() {
+        var x = document.getElementById("loadingIcon");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
         }
-        
-        window.onload = function(){  
-            document.getElementById("loadingIcon").style.display = "none";
-        }
+      }
+
+      function getSelectedCommodities() {
+        const selectedCommodities = [];
+        document
+          .querySelectorAll('input[type="checkbox"]:checked')
+          .forEach((checkbox) => {
+            selectedCommodities.push(checkbox.nextSibling.textContent.trim());
+          });
+        return selectedCommodities;
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        const selectedCommodities = getSelectedCommodities();
+        const systemName = document.getElementById("manual_system").value;
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/selected";
+
+        const systemInput = document.createElement("input");
+        systemInput.type = "hidden";
+        systemInput.name = "system";
+        systemInput.value = systemName;
+        form.appendChild(systemInput);
+
+        selectedCommodities.forEach((commodity) => {
+          const commodityInput = document.createElement("input");
+          commodityInput.type = "hidden";
+          commodityInput.name = "commodities";
+          commodityInput.value = commodity;
+          form.appendChild(commodityInput);
+        });
+
+        document.body.appendChild(form);
+        console.log("go");
+        form.submit();
+      }
     </script>
-    <script>
-        function getSelectedCommodities() {
-            const selectedCommodities = [];
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                selectedCommodities.push(checkbox.nextSibling.textContent.trim());
-            });
-            return selectedCommodities;
-        }
+    <body>
+      <div class="specifyTask" style="text-align: center">
+        <h1>Architect's Notepad</h1>
+        <h2>Specify station:</h2>
+        <form action="/" method="post">
+          <label for="system">In System:</label>
+          <input
+            list="system-results"
+            id="system"
+            name="system"
+            oninput="searchSystems()"
+            autocomplete="off"
+          />
+          <datalist id="system-results"></datalist><br /><br />
 
-        function handleSubmit(event) {
-            event.preventDefault();
-            const selectedCommodities = getSelectedCommodities();
-            const systemName = document.getElementById("manual_system").value
-
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = "/selected";
-
-            const systemInput = document.createElement("input");
-            systemInput.type = "hidden";
-            systemInput.name = "system";
-            systemInput.value = systemName;
-            form.appendChild(systemInput);
-
-            selectedCommodities.forEach(commodity => {
-                const commodityInput = document.createElement("input");
-                commodityInput.type = "hidden";
-                commodityInput.name = "commodities";
-                commodityInput.value = commodity;
-                form.appendChild(commodityInput);
-            });
-
-            document.body.appendChild(form);
-            console.log("go")
-            form.submit();
-        }
-    </script>
-<body>
-    <h1>Architect's Notepad</h1>
-    <div class="specifyTask" style="text-align: center;">
-    <h2>Specify station:</h2>
-    <form action="/" method="post">
-        <label for="system">In System:</label>
-        <input list="system-results" id="system" name="system" oninput="searchSystems()" autocomplete="off">
-        <datalist id="system-results"></datalist><br><br>
-        
-        <label for="station_types">Type:</label><br>
-        <select id="station_types" name="station_types">
+          <label for="station_types">Type:</label><br />
+          <select id="station_types" name="station_types">
             {% for type in station_types %}
-                <option value="{{ type }}" {% if selected_type == type %}selected{% endif %}>{{ type }}</option>
+            <option value="{{ type }}" {% if selected_type == type %}selected{% endif %}>{{ type }}</option>
             {% endfor %}
-        </select>
-        <br />
-        <br></br>
-        
-        <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
-    </form>
+          </select>
+          <br />
+          <br />
 
-    <!-- Manual -->
-    <h2>Or select Commodities</h2>
-    <form action="/selected" method="post" onsubmit="handleSubmit(event)">
-        <label for="system">In System:</label>
-        <input list="manual_system-results" id="manual_system" name="manual_system" oninput="searchSystems(true)" autocomplete="off">
-        <datalist id="manual_system-results"></datalist><br><br>
-        
-        <label for="commodities">Commodities: </label>
-        <br></br>
-            {% for item in items %}
+          <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
+        </form>
+
+        <!-- Manual -->
+        <h2>Or select Commodities</h2>
+        <form action="/selected" method="post" onsubmit="handleSubmit(event)">
+          <label for="system">In System:</label>
+          <input
+            list="manual_system-results"
+            id="manual_system"
+            name="manual_system"
+            oninput="searchSystems(true)"
+            autocomplete="off"
+          />
+          <datalist id="manual_system-results"></datalist><br /><br />
+
+          <div style="text-align: center">
+            <label for="commodities">Commodities: </label>
+            <br />
+            {% for item in items %} 
             <li><input type="checkbox" > {{ item }} </input></li>
-            {% endfor %}
+            {% endfor %} 
+            <br />
+          </div>
+          <br />
+          <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
+        </form>
+
+        <p>Please be aware that this site is under development!</p>
+        <div class="loadingIcon" style="float: right">
+          <img
+            id="loadingIcon"
+            src="{{  url_for('static', filename='icons/edloader.svg')}}"
+            width="50"
+            height="50"
+          />
+        </div>
+      </div>
+      <div class="footer">
+        <a href="https://niceygy.net">Niceygy.Net</a>
+        <a href="https://go.niceygy.net/support_me">Support Me</a>
+        <a href="https://go.niceygy.net/architectnotepad_thread"
+          >Forum Thread</a
+        >
         <br />
-        <br></br>
-        <button type="submit" onclick="toggleLoadingBtn()">Go!</button>
-    </form>
-        
+      </div>
+    </body>
 
-    <p>Please be aware that this site is under development!</p>
-        <div class="loadingIcon" style="float: right;">
-        <img id="loadingIcon" src="{{  url_for('static', filename='icons/edloader.svg')}}" width="50" height="50">
-    </div>
-    </div>
-
-</body>
-<div class="footer">
-    <a href="{{ url_for('changelog') }}">Changelog</a>
-    <a href="https://niceygy.net">Niceygy.Net</a>
-    <a href="https://go.niceygy.net/support_me">Support Me</a>
-    <a href="https://go.niceygy.net/architectnotepad_thread">Forum Thread</a>
-    <br>
-</div>
+  </head>
 </html>
