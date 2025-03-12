@@ -37,6 +37,7 @@
         if (textbox.value == "") {old_value = 0}
         new_value = old_value + add_value
         textbox.value = new_value
+        OnItemCountChange(text)
       }
 
     document.onload = function() {
@@ -46,6 +47,16 @@
           setTextBoxValues([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         } else {
           setTextBoxValues(savedValues);
+        }
+      }
+
+      function OnItemCountChange(key) {
+        const user_input_value = parseInt(document.getElementById(key).value)
+        const calculated_total = parseInt(document.getElementById(`${key}_total`).title)
+        if (user_input_value >= calculated_total) {
+           document.getElementById(`${key}_text`).style = "color: green;"
+        } else {
+          document.getElementById(`${key}_text`).style = ""
         }
       }
     </script>
@@ -60,9 +71,11 @@
     <ul>
     {% for key, item in data.items() %}
     <!-- Item = [Station, required_count] -->
-    <li onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) 
-      <input id="{{key}}" type="text" onclick="event.stopPropagation();"> 
-      <p style="display:inline;">/ {{ item[1] }}</p>
+    <li id="{{key}}_text"  onclick="copyText('{{ item[0][1] }}')">{{ item[0][0] }} has {{ key }} (In {{ item[0][1] }}) 
+      <!-- user box -->
+      <input id="{{key}}" type="text" onclick="event.stopPropagation();" onchange="OnItemCountChange('{{key}}')"> 
+      <!-- total -->
+      <p title="{{ item[1] }}" id="{{key}}_total" style="display:inline; ">/ {{ item[1] }}</p>
     </li>
     {% endfor %}
 
