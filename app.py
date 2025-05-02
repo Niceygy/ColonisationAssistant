@@ -32,7 +32,7 @@ Flask and database
 load_dotenv()
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECTION_STRING")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECTION_STRING_AN")
 app.config["SQLALCHEMY_POOL_SIZE"] = 10
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 30
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
